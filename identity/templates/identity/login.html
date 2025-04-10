@@ -13,37 +13,339 @@
     This approach has been tested with these frameworks:
     Django, Flask.
 -->
+
+<!DOCTYPE html>
 <html lang="en">
-{% if user_code or reset_password_url %}
-  <head>
+<head>
     <meta charset="UTF-8">
-    <title>Sign In</title>
-  </head>
-  <body>
-    <h1>Sign In</h1>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocPulp - Secure Sign In</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+        }
+        .security-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #4F46E5;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Logo and Header -->
+        <div class="flex justify-center mb-8">
+            <div class="text-center">
+                <h1 class="text-4xl font-bold text-gray-800 mb-2">DocPulp</h1>
+                <p class="text-gray-600">Smart QR Management Platform</p>
+            </div>
+        </div>
 
-    {% if user_code %}
-    <ol>
-      <li>To sign in, type <b>{{ user_code }}</b> into
-        <a href='{{ auth_uri }}' target=_blank>{{ auth_uri }}</a>
-        to authenticate.
-      </li>
-      <li>And then <a href="{{ auth_response_url }}">proceed</a>.</li>
-    </ol>
-    {% else %}
-    <ul><li><a href='{{ auth_uri }}'>Sign In</a></li></ul>
-    {% endif %}
+        <!-- Main Content -->
+        <div class="max-w-4xl mx-auto">
+            <!-- Login Card -->
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                <!-- Header Section -->
+                <div class="gradient-bg px-6 py-8 text-center">
+                    <h2 class="text-white text-3xl font-bold">Secure Authentication</h2>
+                    <p class="text-white text-opacity-90 mt-2">You're about to be redirected to our secure login system powered by Microsoft Azure AD B2C</p>
+                </div>
 
-    {% if reset_password_url %}
-    <hr>
-    <a href='{{ reset_password_url }}'>Reset Password</a>
-    {% endif %}
-  </body>
-{% else %}
-  <!-- This shortcut reduces the need to customize this template -->
-  <head>
-    <meta http-equiv='refresh' content='0; URL={{ auth_uri }}'>
-  </head>
-{% endif %}
+                <!-- Login Info -->
+                <div class="p-6">
+                    {% if user_code or reset_password_url %}
+                    <div class="bg-blue-50 rounded-lg p-4 mb-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-info-circle text-blue-500"></i>
+                            </div>
+                            <div class="ml-3">
+                                <h3 class="text-blue-800 font-medium">Authentication Code Required</h3>
+                                {% if user_code %}
+                                <p class="text-blue-700 mt-1">To sign in, use code: <span class="font-bold bg-blue-100 px-2 py-1 rounded">{{ user_code }}</span></p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex flex-col gap-4 mb-8">
+                        <a href="{{ auth_uri }}" class="inline-flex justify-center items-center py-3 px-5 rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 transition duration-300 ease-in-out font-medium">
+                            <i class="fas fa-sign-in-alt mr-2"></i> Continue to Secure Sign In
+                        </a>
+                        
+                        {% if reset_password_url %}
+                        <a href="{{ reset_password_url }}" class="inline-flex justify-center items-center py-2 px-4 rounded-lg text-indigo-600 bg-indigo-50 hover:bg-indigo-100 transition duration-300 ease-in-out font-medium">
+                            <i class="fas fa-lock mr-2"></i> Reset Password
+                        </a>
+                        {% endif %}
+                    </div>
+                    {% else %}
+                    <!-- This is the automatic redirect case -->
+                    <div class="text-center py-10">
+                        <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-indigo-600 mx-auto mb-4"></div>
+                        <p class="text-gray-600">Redirecting to secure sign-in...</p>
+                        <meta http-equiv='refresh' content='0; URL={{ auth_uri }}'>
+                    </div>
+                    {% endif %}
+
+                    <!-- Security Info Boxes -->
+                    <div class="grid md:grid-cols-3 gap-6 mt-6">
+                        <div class="bg-gray-50 p-4 rounded-lg text-center">
+                            <i class="fas fa-shield-alt security-icon"></i>
+                            <h3 class="font-semibold text-lg text-gray-800 mb-2">Enterprise-Grade Security</h3>
+                            <p class="text-gray-600">Microsoft Azure AD B2C provides industry-leading protection for your account and personal information.</p>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-4 rounded-lg text-center">
+                            <i class="fas fa-user-lock security-icon"></i>
+                            <h3 class="font-semibold text-lg text-gray-800 mb-2">Secure Authentication</h3>
+                            <p class="text-gray-600">Multi-factor authentication options available to keep your account protected at all times.</p>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-4 rounded-lg text-center">
+                            <i class="fas fa-fingerprint security-icon"></i>
+                            <h3 class="font-semibold text-lg text-gray-800 mb-2">Privacy First</h3>
+                            <p class="text-gray-600">Your data is encrypted and protected according to international privacy standards.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Info Section -->
+            <div class="mt-8 bg-white rounded-xl shadow-lg p-6">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">Why We Use Azure AD B2C</h3>
+                
+                <div class="space-y-4">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                        </div>
+                        <div class="ml-3">
+                            <h4 class="font-medium text-gray-800">Enterprise-Level Authentication</h4>
+                            <p class="text-gray-600">The same technology trusted by Fortune 500 companies protects your DocPulp account.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                        </div>
+                        <div class="ml-3">
+                            <h4 class="font-medium text-gray-800">Social Account Integration</h4>
+                            <p class="text-gray-600">Safely use existing accounts from Microsoft, Google, or other providers you trust.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                        </div>
+                        <div class="ml-3">
+                            <h4 class="font-medium text-gray-800">Advanced Fraud Protection</h4>
+                            <p class="text-gray-600">Intelligent systems detect and prevent unauthorized access attempts to your account.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                        </div>
+                        <div class="ml-3">
+                            <h4 class="font-medium text-gray-800">Global Compliance</h4>
+                            <p class="text-gray-600">Meets GDPR, SOC 2, and other international data protection requirements.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Help Section -->
+            <div class="mt-6 text-center">
+                <p class="text-gray-600">Need help? <a href="#" class="text-indigo-600 hover:text-indigo-800">Contact our support team</a></p>
+                <p class="text-sm text-gray-500 mt-2">© 2025 DocPulp. All rights reserved.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Optional: Add any JavaScript for enhanced functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // You could add animations or other enhancements here
+        });
+    </script>
+</body>
 </html>
 
+
+#####################
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocPulp - Secure Sign In</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+        }
+        .security-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #4F46E5;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Logo and Header -->
+        <div class="flex justify-center mb-8">
+            <div class="text-center">
+                <h1 class="text-4xl font-bold text-gray-800 mb-2">DocPulp</h1>
+                <p class="text-gray-600">Smart QR Management Platform</p>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="max-w-4xl mx-auto">
+            <!-- Login Card -->
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                <!-- Header Section -->
+                <div class="gradient-bg px-6 py-8 text-center">
+                    <h2 class="text-white text-3xl font-bold">Secure Authentication</h2>
+                    <p class="text-white text-opacity-90 mt-2">You're about to be redirected to our secure login system powered by Microsoft Azure AD B2C</p>
+                </div>
+
+                <!-- Login Info -->
+                <div class="p-6">
+                    {% if user_code or reset_password_url %}
+                    <div class="bg-blue-50 rounded-lg p-4 mb-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-info-circle text-blue-500"></i>
+                            </div>
+                            <div class="ml-3">
+                                <h3 class="text-blue-800 font-medium">Authentication Code Required</h3>
+                                {% if user_code %}
+                                <p class="text-blue-700 mt-1">To sign in, use code: <span class="font-bold bg-blue-100 px-2 py-1 rounded">{{ user_code }}</span></p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex flex-col gap-4 mb-8">
+                        <a href="{{ auth_uri }}" class="inline-flex justify-center items-center py-3 px-5 rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 transition duration-300 ease-in-out font-medium">
+                            <i class="fas fa-sign-in-alt mr-2"></i> Continue to Secure Sign In
+                        </a>
+                        
+                        {% if reset_password_url %}
+                        <a href="{{ reset_password_url }}" class="inline-flex justify-center items-center py-2 px-4 rounded-lg text-indigo-600 bg-indigo-50 hover:bg-indigo-100 transition duration-300 ease-in-out font-medium">
+                            <i class="fas fa-lock mr-2"></i> Reset Password
+                        </a>
+                        {% endif %}
+                    </div>
+                    {% else %}
+                    <!-- This is the automatic redirect case -->
+                    <div class="text-center py-10">
+                        <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-indigo-600 mx-auto mb-4"></div>
+                        <p class="text-gray-600">Redirecting to secure sign-in...</p>
+                        <meta http-equiv='refresh' content='0; URL={{ auth_uri }}'>
+                    </div>
+                    {% endif %}
+
+                    <!-- Security Info Boxes -->
+                    <div class="grid md:grid-cols-3 gap-6 mt-6">
+                        <div class="bg-gray-50 p-4 rounded-lg text-center">
+                            <i class="fas fa-shield-alt security-icon"></i>
+                            <h3 class="font-semibold text-lg text-gray-800 mb-2">Enterprise-Grade Security</h3>
+                            <p class="text-gray-600">Microsoft Azure AD B2C provides industry-leading protection for your account and personal information.</p>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-4 rounded-lg text-center">
+                            <i class="fas fa-user-lock security-icon"></i>
+                            <h3 class="font-semibold text-lg text-gray-800 mb-2">Secure Authentication</h3>
+                            <p class="text-gray-600">Multi-factor authentication options available to keep your account protected at all times.</p>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-4 rounded-lg text-center">
+                            <i class="fas fa-fingerprint security-icon"></i>
+                            <h3 class="font-semibold text-lg text-gray-800 mb-2">Privacy First</h3>
+                            <p class="text-gray-600">Your data is encrypted and protected according to international privacy standards.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Info Section -->
+            <div class="mt-8 bg-white rounded-xl shadow-lg p-6">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">Why We Use Azure AD B2C</h3>
+                
+                <div class="space-y-4">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                        </div>
+                        <div class="ml-3">
+                            <h4 class="font-medium text-gray-800">Enterprise-Level Authentication</h4>
+                            <p class="text-gray-600">The same technology trusted by Fortune 500 companies protects your DocPulp account.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                        </div>
+                        <div class="ml-3">
+                            <h4 class="font-medium text-gray-800">Social Account Integration</h4>
+                            <p class="text-gray-600">Safely use existing accounts from Microsoft, Google, or other providers you trust.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                        </div>
+                        <div class="ml-3">
+                            <h4 class="font-medium text-gray-800">Advanced Fraud Protection</h4>
+                            <p class="text-gray-600">Intelligent systems detect and prevent unauthorized access attempts to your account.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                        </div>
+                        <div class="ml-3">
+                            <h4 class="font-medium text-gray-800">Global Compliance</h4>
+                            <p class="text-gray-600">Meets GDPR, SOC 2, and other international data protection requirements.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Help Section -->
+            <div class="mt-6 text-center">
+                <p class="text-gray-600">Need help? <a href="#" class="text-indigo-600 hover:text-indigo-800">Contact our support team</a></p>
+                <p class="text-sm text-gray-500 mt-2">© 2025 DocPulp. All rights reserved.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Optional: Add any JavaScript for enhanced functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // You could add animations or other enhancements here
+        });
+    </script>
+</body>
+</html>
